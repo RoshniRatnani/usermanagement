@@ -1,0 +1,252 @@
+<div class="app-container">
+  <!-- Overlay for mobile -->
+  <div class="sidebar-overlay" 
+       [class.show]="!sidebarCollapsed" 
+       (click)="toggleSidebar()"
+       *ngIf="isMobileView()">
+  </div>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" [class.collapsed]="sidebarCollapsed">
+    <div class="logo">
+      <div class="logo-content">
+        <h2>YOCO</h2>
+        <span class="logo-sub">stays</span>
+      </div>
+    </div>
+    <nav class="nav-menu">
+      <a href="#" class="nav-item">
+        <i class="bi bi-grid icon"></i>
+        <span>Dashboard</span>
+      </a>
+      <a href="#" class="nav-item">
+        <i class="bi bi-graph-up icon"></i>
+        <span>Reports & Analytics</span>
+      </a>
+      <a href="#" class="nav-item active">
+        <i class="bi bi-people icon"></i>
+        <span>Users</span>
+      </a>
+      <a href="#" class="nav-item">
+        <i class="bi bi-exclamation-triangle icon"></i>
+        <span>Emergency</span>
+      </a>
+      <a href="#" class="nav-item">
+        <i class="bi bi-exclamation-circle icon"></i>
+        <span>Complaints</span>
+      </a>
+      <a href="#" class="nav-item">
+        <i class="bi bi-calendar-check icon"></i>
+        <span>Attendance</span>
+      </a>
+      <a href="#" class="nav-item">
+        <i class="bi bi-calendar-event icon"></i>
+        <span>Leaves</span>
+      </a>
+      <a href="#" class="nav-item">
+        <i class="bi bi-cup-straw icon"></i>
+        <span>Hostel Mess</span>
+      </a>
+      <a href="#" class="nav-item">
+        <i class="bi bi-currency-rupee icon"></i>
+        <span>Fees</span>
+      </a>
+      <a href="#" class="nav-item">
+        <i class="bi bi-house icon"></i>
+        <span>Amenities</span>
+      </a>
+      <a href="#" class="nav-item">
+        <i class="bi bi-box-seam icon"></i>
+        <span>Inventory</span>
+      </a>
+      <a href="#" class="nav-item">
+        <i class="bi bi-person-badge icon"></i>
+        <span>Visitors</span>
+      </a>
+      <a href="#" class="nav-item">
+        <i class="bi bi-chat-dots icon"></i>
+        <span>Community</span>
+      </a>
+      <a href="#" class="nav-item">
+        <i class="bi bi-droplet icon"></i>
+        <span>Laundry</span>
+      </a>
+      <a href="#" class="nav-item">
+        <i class="bi bi-door-open icon"></i>
+        <span>Rooms Allocation</span>
+      </a>
+      <a href="#" class="nav-item">
+        <i class="bi bi-box icon"></i>
+        <span>Parcel</span>
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content" [class.expanded]="sidebarCollapsed">
+    <!-- Top Header -->
+    <header class="top-header">
+      <div class="header-left">
+        <button class="toggle-sidebar-btn" (click)="toggleSidebar()">
+          <i class="bi bi-list"></i>
+        </button>
+        <div class="hostel-info">
+          <h3>GHMCE BOYS HOSTEL</h3>
+          <p>Shradha Park, Nagpur</p>
+        </div>
+      </div>
+      <div class="header-center">
+        <div class="search-box">
+          <span class="search-icon">🔍</span>
+          <input 
+            type="text" 
+            placeholder="Search Hostel"
+            [value]="searchTerm"
+            (input)="onSearchChange($event)"
+          />
+        </div>
+      </div>
+      <div class="header-right">
+        <button class="notification-btn">🔔</button>
+        <div class="user-profile">
+          <img src="https://ui-avatars.com/api/?name=Vaibhav&background=7c3aed&color=fff" alt="User" class="profile-img">
+          <div class="profile-info">
+            <span class="profile-name">Vaibhav</span>
+            <span class="profile-role">Hostel Warden</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Page Header -->
+    <div class="page-header">
+      <div class="page-title">
+        <h1>User Management</h1>
+        <p>Hi, Welcome to User Management</p>
+      </div>
+      <div class="add-users-dropdown">
+        <button class="add-users-btn" (click)="toggleAddUserMenu()">
+          Add Users ▼
+        </button>
+        <div class="add-users-menu" [class.show]="showAddUserMenu">
+          <button class="menu-item" (click)="addUser('Admin')">Add Admin</button>
+          <button class="menu-item" (click)="addUser('Staff')">Add Staff</button>
+          <button class="menu-item" (click)="addUser('Student')">Add Student</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="stats-cards">
+      <div class="stat-card">
+        <div class="stat-header">
+          <h3>Hostel Admin Count</h3>
+          <span class="stat-count">{{ adminCount.toString().padStart(2, '0') }}</span>
+        </div>
+        <div class="stat-details">
+          <span class="stat-item inactive">● In-Active - {{ adminInactive.toString().padStart(2, '0') }}</span>
+          <span class="stat-item active">● Active - {{ adminActive.toString().padStart(2, '0') }}</span>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-header">
+          <h3>Hostel Staff Count</h3>
+          <span class="stat-count">{{ staffCount.toString().padStart(2, '0') }}</span>
+        </div>
+        <div class="stat-details">
+          <span class="stat-item inactive">● In-Active - {{ staffInactive.toString().padStart(2, '0') }}</span>
+          <span class="stat-item active">● Active - {{ staffActive.toString().padStart(2, '0') }}</span>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-header">
+          <h3>Hostel Students Count</h3>
+          <span class="stat-count">{{ studentCount.toString().padStart(2, '0') }}</span>
+        </div>
+        <div class="stat-details">
+          <span class="stat-item inactive">● In-Active - {{ studentInactive.toString().padStart(2, '0') }}</span>
+          <span class="stat-item active">● Active - {{ studentActive.toString().padStart(2, '0') }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- User Section -->
+    <div class="user-section">
+      <div class="section-header">
+        <div class="dropdown">
+          <button class="dropdown-btn" (click)="toggleCategoryDropdown()">
+            {{ selectedCategory === 'All' ? 'All Users' : 'Hostel ' + selectedCategory }} ▼
+          </button>
+          <div class="dropdown-menu" [class.show]="showCategoryDropdown">
+            <a (click)="onCategoryChange('All')">All Users</a>
+            <a (click)="onCategoryChange('Admins')">Hostel Admins</a>
+            <a (click)="onCategoryChange('Staff')">Hostel Staff</a>
+            <a (click)="onCategoryChange('Students')">Hostel Students</a>
+          </div>
+        </div>
+        <div class="filter-buttons">
+          <button 
+            class="filter-btn"
+            [class.active]="selectedStatus === 'All'"
+            (click)="onStatusChange('All')"
+          >
+            All
+          </button>
+          <button 
+            class="filter-btn"
+            [class.active]="selectedStatus === 'Active'"
+            (click)="onStatusChange('Active')"
+          >
+            Active
+          </button>
+          <button 
+            class="filter-btn"
+            [class.active]="selectedStatus === 'In-Active'"
+            (click)="onStatusChange('In-Active')"
+          >
+            In-Active
+          </button>
+          <button class="filter-btn">Left Out</button>
+          <button class="search-btn">🔍</button>
+        </div>
+      </div>
+
+      <!-- Loading State -->
+      <div *ngIf="loading" class="loading-container">
+        <div class="spinner"></div>
+        <p>Loading users...</p>
+      </div>
+
+      <!-- Error State -->
+      <div *ngIf="error && !loading" class="error-container">
+        <p>{{ error }}</p>
+        <button class="retry-button" (click)="loadUsers()">Retry</button>
+      </div>
+
+      <!-- User Cards Grid -->
+      <div *ngIf="!loading && !error" class="users-grid">
+        <div *ngFor="let user of filteredUsers" class="user-card">
+          <div class="card-status">
+            <span class="status-indicator" [class.active]="user.status === 'Active'"></span>
+          </div>
+          <div class="card-content">
+            <div class="user-avatar">
+              <img src="https://ui-avatars.com/api/?name={{user.name}}&background=7c3aed&color=fff" alt="{{user.name}}">
+            </div>
+            <h4 class="user-name">{{ user.name }}</h4>
+            <p class="user-id">{{ user.id.toString().padStart(6, '0') }}</p>
+            <p class="user-phone">{{ user.phone }}</p>
+          </div>
+          <button class="view-profile-btn" (click)="viewProfile(user.id)">
+            View Profile
+          </button>
+        </div>
+      </div>
+
+      <!-- Empty State -->
+      <div *ngIf="!loading && !error && filteredUsers.length === 0" class="empty-state">
+        <p>No users found matching your criteria.</p>
+      </div>
+    </div>
+  </main>
+</div>
